@@ -7,8 +7,7 @@ import retrofit2.http.Path;
 
 public interface ApiClient {
     @Headers({"Accept: application/json",
-            "app_id: ae33532f",
-            "app_key: 39761616836d300839cb5205b7ac3220"})
+            })
     @GET("{word}/definitions")
     Call<Example> GetExampleFor (@Path("word") String word);
 }
