@@ -1,9 +1,12 @@
 package com.example.marcin.mywords;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
+import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 
 @Database(entities = {FlashCard.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
@@ -17,7 +20,10 @@ public abstract class AppDatabase extends RoomDatabase {
             synchronized (AppDatabase.class){
                 if (INSTANCE==null){
                     INSTANCE=Room.databaseBuilder(context.getApplicationContext(),
-                            AppDatabase.class,"app_database").build();
+                            AppDatabase.class,"app_database")
+                            .addCallback(sRoomDatabaseCallback)
+                            .allowMainThreadQueries()
+                            .build();
                 }
             }
         }
@@ -31,4 +37,43 @@ public abstract class AppDatabase extends RoomDatabase {
      * override RoomDatabase.Callback()#onCreate
      */
     //private static override RoomDatabase.Callback()#onCreate
+    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
+
+        @Override
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
+            // If you want to keep the data through app restarts,
+            // comment out the following line.
+            new PopulateDbAsync(INSTANCE).execute();
+        }
+    };
+
+    /**
+     * Populate the database in the background.
+     * If you want to start with more words, just add them.
+     */
+    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
+
+        private final FlashCardDao flashCardDao;
+
+        PopulateDbAsync(AppDatabase db) {
+            flashCardDao = db.flashCardDao();
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            // Start the app with a clean database every time.
+            // Not needed if you only populate on creation.
+            FlashCard flashCardnew = new FlashCard();
+            flashCardnew.setWordDb("cat");
+            flashCardnew.setDefinitionDb("bad creature");
+            flashCardDao.insert(flashCardnew);
+            flashCardnew = new FlashCard();
+            flashCardnew.setWordDb("dog");
+            flashCardnew.setDefinitionDb("good creature");
+            flashCardDao.insert(flashCardnew);
+
+            return null;
+        }
+    }
 }
