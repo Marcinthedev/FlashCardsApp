@@ -25,7 +25,6 @@ public class FlashCard {
     }
 
     public FlashCard() {
-
     }
 
 

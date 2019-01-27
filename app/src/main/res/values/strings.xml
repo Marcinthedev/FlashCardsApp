@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">MyWords</string>
     <string name="reminder">Type your word</string>
+    <string name="Definition">Definition</string>
+    <string name="Word">Word</string>
+    <string name="Find">Find</string>
+    <string name="Save">Save</string>
+    <string name="Hint">Enter new word to learn</string>
 </resources>

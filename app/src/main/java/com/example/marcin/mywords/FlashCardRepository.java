@@ -32,22 +32,16 @@ public class FlashCardRepository {
     private void asyncFinished(List<FlashCard> results){
         searchResults.setValue(results);
     }
+
     public void insertFlashCard(FlashCard newflashcard) {
-        InsertAsyncTask task = new InsertAsyncTask(flashCardDao);
-        task.execute(newflashcard);
+        new InsertAsyncTask(flashCardDao).execute(newflashcard);
+
     }
 
-    /*public void deleteFlashCard(FlashCard newflashcard) {
+    public void deleteFlashCard(FlashCard newflashcard) {
         DeleteAsyncTask task = new DeleteAsyncTask(flashCardDao);
         task.execute(newflashcard);
-    }*/
-
- /*   public void findFlashCard(FlashCard newflashcard) {
-        QueryAsyncTask task = new QueryAsyncTask(flashCardDao);
-        task.delegate = this;
-        task.execute(newflashcard);
     }
-*/
 
 
 
@@ -55,25 +49,7 @@ public class FlashCardRepository {
 
 
 
-//Na ten moment niepotrzebne
-    /*private static class QueryAsyncTask extends
-            AsyncTask<String,Void,List<FlashCard>>{
-        private FlashCardDao asyncTaskDao;
-        private FlashCardRepository delegate =null;
 
-        QueryAsyncTask(FlashCardDao dao){
-            asyncTaskDao=dao;
-        }
-        @Override
-        protected List<FlashCard> doInBackground(final String... params) {
-            return asyncTaskDao.findFlashCard(params[0]);
-        }
-
-        @Override
-        protected void onPostExecute(List<FlashCard> result) {
-            delegate.asyncFinished(result);
-        }
-    }*/
 
 //    -------------------------------INSERT TASK-----------------------------------
     private static class InsertAsyncTask extends AsyncTask<FlashCard, Void, Void> {
