@@ -37,15 +37,9 @@ public class FlashCardAdapter
             super(itemView);
             flashcardWord = itemView.findViewById(R.id.Word);
             flashcardDefinition = itemView.findViewById(R.id.Definition);
-//            itemView.setOnClickListener(this);
             parentLayout = itemView.findViewById(R.id.parent_layout);
         }
-        /*@Override
-        public void onClick(View v){
-            int position = getAdapterPosition();
-            FlashCard flashCard = new FlashCard(flashcardWord.getText().toString(),flashcardDefinition.getText().toString())
-            Intent intent = new Intent()
-        }*/
+
     }
 
 

@@ -18,7 +18,7 @@ public interface FlashCardDao {
     List<FlashCard> getAll();
 
     @Query("SELECT * FROM FlashCard_Bank WHERE Word= :name")
-    LiveData<FlashCard> findFlashCard(String name);
+    List<FlashCard> findFlashCard(String name);
 
     @Query("SELECT * from FlashCard_Bank ORDER BY Word ASC")
     LiveData<List<FlashCard>> getAllFlashCards();
@@ -30,18 +30,23 @@ public interface FlashCardDao {
             "Definition LIKE :DefinitionOut LIMIT 1")
     FlashCard findByName(String WordOut, String DefinitionOut);
 
+    @Query("DELETE FROM FlashCard_Bank")
+    void deleteAllFlashCards();
+
     //jesli jest to samo id to zmieniamy na nowe
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(FlashCard flashCard);
 
-
+   /* @Query("SELECT * FROM FlashCard_Bank WHERE Word= :name")
+    boolean findFlashCard(String name);*/
     /*@Insert
     void insertAll(FlashCard... flashCards);*/
 
     @Delete
     void delete(FlashCard flashCard);
+
     @Delete
-    public void deleteFCs(FlashCard... flashCards);
+     void deleteAll(FlashCard... flashCards);
 
 //    ----------------------------------------
     @Update
