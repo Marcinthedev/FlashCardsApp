@@ -60,7 +60,6 @@ private void SetupButtons(){
                             Example definitionBody = exampleResponse.body();
                             definition = definitionBody.getResults().get(0).getLexicalEntries()
                                     .get(0).getEntries().get(0).getSenses().get(0).getDefinitions().get(0);
-                            // System.out.println(definition);
                             Result.setText(definition);
                         }
                         else {
@@ -76,14 +75,22 @@ private void SetupButtons(){
 
                 break;
             case R.id.button2:
-                FlashCard flashCard= new FlashCard();
-                flashCard.setWordDb(Input.getText().toString());
-                flashCard.setDefinitionDb(Result.getText().toString());
+//jak sprawdzac czy usuniete?
+ if(db.flashCardDao().findFlashCard(Input.getText().toString())!=null){
+     FlashCard flashCard= new FlashCard();
+     flashCard.setWordDb(Input.getText().toString());
+     flashCard.setDefinitionDb(Result.getText().toString());
+     db.flashCardDao().insert(flashCard);
+     Intent i = new Intent(this,MainActivity.class);
+     startActivity(i);
+ }
+ else {
+     Toast toast = Toast.makeText(getApplicationContext(), "Word is already in database",Toast.LENGTH_LONG);
+     toast.show();
+ }
 
-db.flashCardDao().insert(flashCard);
 
-Intent i = new Intent(this,MainActivity.class);
-startActivity(i);
+
 break;
 
 

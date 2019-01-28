@@ -93,6 +93,9 @@ public class FlashCardAdapter
         flashCards = flashCardsSet;
         notifyDataSetChanged();
     }
+    public FlashCard getFlashCardAt(int position){
+        return flashCards.get(position);
+    }
     @Override
     public int getItemCount() {
         if (flashCards != null)
