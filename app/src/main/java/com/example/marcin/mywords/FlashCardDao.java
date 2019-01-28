@@ -18,7 +18,7 @@ public interface FlashCardDao {
     List<FlashCard> getAll();
 
     @Query("SELECT * FROM FlashCard_Bank WHERE Word= :name")
-    List<FlashCard> findFlashCard(String name);
+    LiveData<FlashCard> findFlashCard(String name);
 
     @Query("SELECT * from FlashCard_Bank ORDER BY Word ASC")
     LiveData<List<FlashCard>> getAllFlashCards();
@@ -33,6 +33,7 @@ public interface FlashCardDao {
     //jesli jest to samo id to zmieniamy na nowe
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(FlashCard flashCard);
+
 
     /*@Insert
     void insertAll(FlashCard... flashCards);*/

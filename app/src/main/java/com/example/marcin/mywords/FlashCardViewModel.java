@@ -29,6 +29,9 @@ public class FlashCardViewModel extends AndroidViewModel
         FCRepository.insertFlashCard(flashCard);
     }
 
+    public void delete(FlashCard flashCard){
+       FCRepository.deleteFlashCard(flashCard);
+    }
     MutableLiveData<List<FlashCard>> getSearchResults() {
     return searchResults;
 }

@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -35,13 +36,8 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 //public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-  private String definition;
-    private TextView Result;
-    private EditText Input;
-    private Button Find;
-    private Button Save;
 
-    //private FlashCard flashCard;
+
     private ApiClient client;
     private AppDatabase db;
     private FlashCardViewModel decflashCardViewModel;
@@ -49,7 +45,7 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_act_tutorial);
-setupBottomNavView();
+        setupBottomNavView();
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
 
 
@@ -78,25 +74,26 @@ setupBottomNavView();
 
             }
         });
+        //ItemTouchHelper zeby poprzez przesuniecie usuwac dane slowko z bazy danych
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                decflashCardViewModel.delete(adapter.getFlashCardAt(viewHolder.getAdapterPosition()));
+                Toast.makeText(MainActivity.this, "Note deleted", Toast.LENGTH_SHORT);
+            }
+        }).attachToRecyclerView(recyclerView);
 
 
 
 
     }
 
-    private void SetupButtons() {
-        Find = findViewById(R.id.button);
-        Find.setOnClickListener(this);
 
-        Save = findViewById(R.id.button2);
-        Save.setOnClickListener(this);
-
-        Input=findViewById(R.id.Text);
-
-        Result=findViewById(R.id.Result);
-
-
-    }
   @Override
     public void onClick(View view) {
         switch (view.getId()) {

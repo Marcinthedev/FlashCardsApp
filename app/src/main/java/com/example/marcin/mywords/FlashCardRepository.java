@@ -17,12 +17,15 @@ public class FlashCardRepository {
     private FlashCardDao flashCardDao;
     private LiveData<List<FlashCard>> allFlashCards;
 
+    private FlashCard FoundFlashCard;
+
 
     public FlashCardRepository(Application application){
         AppDatabase appDb;
         appDb = AppDatabase.getDatabase(application);
         flashCardDao = appDb.flashCardDao();
         allFlashCards=flashCardDao.getAllFlashCards();
+
     }
         //room zalacza wszystkie queries na osobnych threadach
     //Obserwowana livedata powiadomi obserwatora przy zmianie
