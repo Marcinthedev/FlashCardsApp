@@ -16,6 +16,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,7 +38,7 @@ import retrofit2.Response;
 import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 //public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+    public class MainActivity extends AppCompatActivity {
 
 
     private ApiClient client;
@@ -94,22 +97,6 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
     }
 
 
-  @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.button:
-
-
-                break;
-            case R.id.button2:
-
-                //worker thread to insert data
-
-
-
-        }
-    }
-
     /**
      * BottomNavigationSetup
      */
@@ -118,5 +105,24 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
         BottomNavViewHelper.setupBottomNavView(bottomNavigationViewEx);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.delete_item,menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.delete_all_flashcards:
+                decflashCardViewModel.deleteAll();
+                Toast.makeText(this,"All FlashCards Deleted", Toast.LENGTH_SHORT).show();
+                return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+
+        }
+
+    }
 }

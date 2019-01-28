@@ -17,7 +17,6 @@ public class FlashCardRepository {
     private FlashCardDao flashCardDao;
     private LiveData<List<FlashCard>> allFlashCards;
 
-    private FlashCard FoundFlashCard;
 
 
     public FlashCardRepository(Application application){
@@ -40,13 +39,45 @@ public class FlashCardRepository {
         new InsertAsyncTask(flashCardDao).execute(newflashcard);
 
     }
+    public void deleteAllFlashCards(){
+        new DeleteAllAsyncTask(flashCardDao).execute();
+    }
 
     public void deleteFlashCard(FlashCard newflashcard) {
         DeleteAsyncTask task = new DeleteAsyncTask(flashCardDao);
         task.execute(newflashcard);
     }
+    /*LiveData<List<FlashCard>> findFlashCard(String name){
+        return flashCardDao.findFlashCard(name);
+
+    }*/
+    public void findFlashCard(String name) {
+        QueryAsyncTask task = new QueryAsyncTask(flashCardDao);
+        task.delegate = this;
+        task.execute(name);
+    }
 
 
+    private static class QueryAsyncTask extends
+            AsyncTask<String, Void, List<FlashCard>> {
+
+        private FlashCardDao asyncTaskDao;
+        private FlashCardRepository delegate = null;
+
+        QueryAsyncTask(FlashCardDao dao) {
+            asyncTaskDao = dao;
+        }
+
+        @Override
+        protected List<FlashCard> doInBackground(final String... params) {
+            return asyncTaskDao.findFlashCard(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(List<FlashCard> result) {
+            delegate.asyncFinished(result);
+        }
+    }
 
 
 
@@ -85,4 +116,36 @@ public class FlashCardRepository {
             return null;
         }
     }
+    //    -------------------------------DELETE ALL TASK-----------------------------------
+
+    private static class DeleteAllAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private FlashCardDao asyncTaskDao;
+
+        DeleteAllAsyncTask(FlashCardDao dao) {
+            asyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final Void... voids) {
+            asyncTaskDao.deleteAllFlashCards();
+            return null;
+        }
+    }
+    //    -------------------------------FIND WORD TASK-----------------------------------
+
+    /*private static class FindWordAsyncTask extends AsyncTask<String, Void, Void> {
+
+        private FlashCardDao asyncTaskDao;
+
+        FindWordAsyncTask(FlashCardDao dao) {
+            asyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final String... params) {
+            asyncTaskDao.findFlashCard(params[0]);
+            return null;
+        }
+    }*/
 }

@@ -76,7 +76,7 @@ private void SetupButtons(){
                 break;
             case R.id.button2:
 //jak sprawdzac czy usuniete?
- if(db.flashCardDao().findFlashCard(Input.getText().toString())!=null){
+ if(db.flashCardDao().findFlashCard(Input.getText().toString()).size()==0){
      FlashCard flashCard= new FlashCard();
      flashCard.setWordDb(Input.getText().toString());
      flashCard.setDefinitionDb(Result.getText().toString());
