@@ -21,6 +21,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.marcin.mywords.Utils.BottomNavViewHelper;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -46,7 +49,7 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_act_tutorial);
-
+setupBottomNavView();
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
 
 
@@ -110,6 +113,13 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
         }
     }
 
+    /**
+     * BottomNavigationSetup
+     */
+    private void setupBottomNavView(){
+        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
+        BottomNavViewHelper.setupBottomNavView(bottomNavigationViewEx);
+    }
 
 
 }

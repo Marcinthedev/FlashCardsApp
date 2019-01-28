@@ -12,6 +12,13 @@
     <include
         layout="@layout/content_main"
          />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true">
+        <include layout="@layout/layout_bottom_nav"/>
+
+    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -20,7 +27,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|end"
-        android:layout_marginEnd="39dp"
-        android:layout_marginBottom="34dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="60dp"
         android:src="@drawable/ic_add_black_24dp" />
 </RelativeLayout>

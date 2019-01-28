@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyWords</string>
+    <string name="app_name">MyWordsApp</string>
     <string name="reminder">Type your word</string>
     <string name="Definition">Definition</string>
     <string name="Word">Word</string>
