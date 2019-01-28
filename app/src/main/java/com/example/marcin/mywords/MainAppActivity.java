@@ -10,6 +10,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.marcin.mywords.Utils.BottomNavViewHelper;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,6 +29,7 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SetupButtons();
+        setupBottomNavView();
 
          client = ServiceApi.createServiceApi();
          db=AppDatabase.getDatabase(this);
@@ -99,4 +103,8 @@ break;
             return null;
         }
     }*/
+  private void setupBottomNavView(){
+      BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
+      BottomNavViewHelper.setupBottomNavView(bottomNavigationViewEx);
+  }
 }

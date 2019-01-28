@@ -31,7 +31,7 @@ public interface FlashCardDao {
     FlashCard findByName(String WordOut, String DefinitionOut);
 
     //jesli jest to samo id to zmieniamy na nowe
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(FlashCard flashCard);
 
     /*@Insert

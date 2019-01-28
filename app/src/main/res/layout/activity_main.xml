@@ -49,6 +49,12 @@
         android:text="@string/Definition"
 
         android:textSize="18sp" />
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_alignParentBottom="true">
+    <include layout="@layout/layout_bottom_nav"/>
 
+</RelativeLayout>
 
 </RelativeLayout>
