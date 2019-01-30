@@ -48,14 +48,4 @@ public class FlashCardViewModel extends AndroidViewModel
     }
 
 
-
-
-
- /*   public void findProduct(String name) {
-        FCRepository.findProduct(name);
-    }
-
-    public void deleteFlashCard(String name) {
-        FCRepository.deleteFlashCard(name);
-    }*/
 }

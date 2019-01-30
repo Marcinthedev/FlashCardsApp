@@ -37,20 +37,10 @@ public interface FlashCardDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(FlashCard flashCard);
 
-   /* @Query("SELECT * FROM FlashCard_Bank WHERE Word= :name")
-    boolean findFlashCard(String name);*/
-    /*@Insert
-    void insertAll(FlashCard... flashCards);*/
-
     @Delete
     void delete(FlashCard flashCard);
 
-    @Delete
-     void deleteAll(FlashCard... flashCards);
 
-//    ----------------------------------------
-    @Update
-    void updateFlashcards(FlashCard...flashCards);
 
 
 

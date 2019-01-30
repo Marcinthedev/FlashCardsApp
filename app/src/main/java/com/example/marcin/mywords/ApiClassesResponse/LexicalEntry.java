@@ -1,5 +1,6 @@
-package com.example.marcin.mywords;
+package com.example.marcin.mywords.ApiClassesResponse;
 
+import com.example.marcin.mywords.ApiClassesResponse.Entry;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

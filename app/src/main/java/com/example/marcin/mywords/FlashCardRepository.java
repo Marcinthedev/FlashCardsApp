@@ -31,6 +31,7 @@ public class FlashCardRepository {
     LiveData<List<FlashCard>> getAllFlashCards() {
         return allFlashCards;
     }
+
     private void asyncFinished(List<FlashCard> results){
         searchResults.setValue(results);
     }
@@ -47,18 +48,15 @@ public class FlashCardRepository {
         DeleteAsyncTask task = new DeleteAsyncTask(flashCardDao);
         task.execute(newflashcard);
     }
-    /*LiveData<List<FlashCard>> findFlashCard(String name){
-        return flashCardDao.findFlashCard(name);
 
-    }*/
-    public void findFlashCard(String name) {
+   /* public void findFlashCard(String name) {
         QueryAsyncTask task = new QueryAsyncTask(flashCardDao);
         task.delegate = this;
         task.execute(name);
-    }
+    }*/
 
 
-    private static class QueryAsyncTask extends
+   /* private static class QueryAsyncTask extends
             AsyncTask<String, Void, List<FlashCard>> {
 
         private FlashCardDao asyncTaskDao;
@@ -77,7 +75,7 @@ public class FlashCardRepository {
         protected void onPostExecute(List<FlashCard> result) {
             delegate.asyncFinished(result);
         }
-    }
+    }*/
 
 
 
@@ -132,20 +130,5 @@ public class FlashCardRepository {
             return null;
         }
     }
-    //    -------------------------------FIND WORD TASK-----------------------------------
 
-    /*private static class FindWordAsyncTask extends AsyncTask<String, Void, Void> {
-
-        private FlashCardDao asyncTaskDao;
-
-        FindWordAsyncTask(FlashCardDao dao) {
-            asyncTaskDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(final String... params) {
-            asyncTaskDao.findFlashCard(params[0]);
-            return null;
-        }
-    }*/
 }

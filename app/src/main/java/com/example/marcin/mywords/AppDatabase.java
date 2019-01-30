@@ -7,7 +7,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-
+//Stworzenie bazy danych w Room
 @Database(entities = {FlashCard.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     //uzywanie metod z dao
@@ -29,21 +29,13 @@ public abstract class AppDatabase extends RoomDatabase {
         }
         return INSTANCE;
     }
-    /**
-     * Override the onOpen method to populate the database.
-     * For this sample, we clear the database every time it is created or opened.
-     *
-     * If you want to populate the database only when the database is created for the 1st time,
-     * override RoomDatabase.Callback()#onCreate
-     */
-    //private static override RoomDatabase.Callback()#onCreate
+
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
 
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
-            // If you want to keep the data through app restarts,
-            // comment out the following line.
+            // wpisywanie wstepnych danych
             new PopulateDbAsync(INSTANCE).execute();
         }
     };
@@ -66,11 +58,14 @@ public abstract class AppDatabase extends RoomDatabase {
             // Not needed if you only populate on creation.
             FlashCard flashCardnew = new FlashCard();
             flashCardnew.setWordDb("cat");
-            flashCardnew.setDefinitionDb("bad creature");
+            flashCardnew.setDefinitionDb("a small domesticated carnivorous mammal with soft fur, " +
+                    "a short snout, and retractable claws. It is widely kept as a pet or for catching mice," +
+                    " and many breeds have been developed.");
             flashCardDao.insert(flashCardnew);
             flashCardnew = new FlashCard();
             flashCardnew.setWordDb("dog");
-            flashCardnew.setDefinitionDb("good creature");
+            flashCardnew.setDefinitionDb("a domesticated carnivorous mammal that typically has a long snout," +
+                    " an acute sense of smell, non-retractable claws, and a barking, howling, or whining voice.");
             flashCardDao.insert(flashCardnew);
 
             return null;
