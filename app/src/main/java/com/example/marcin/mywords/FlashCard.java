@@ -4,7 +4,7 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
-
+//tabela FlashCard_Bank
 @Entity(tableName = "FlashCard_Bank")
 public class FlashCard {
 
@@ -29,7 +29,6 @@ public class FlashCard {
 
 
     //Getters n setters
-  //  @NonNull
     public int getFcId() {
         return this.FcId;
     }
@@ -53,19 +52,6 @@ public class FlashCard {
     public void setDefinitionDb(String definitionDb) {
         this.DefinitionDb = definitionDb;
     }
-
-    //Methods
-    /*@Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof FlashCard)) return false;
-
-        FlashCard flashCard = (FlashCard) o;
-
-        if (FcId != FlashCard.) return false;
-        return title != null ? title.equals(note.title) : note.title == null;
-    }*/
-
 
 
     @Override

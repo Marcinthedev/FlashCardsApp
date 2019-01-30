@@ -1,7 +1,6 @@
 package com.example.marcin.mywords;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -10,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.marcin.mywords.ApiClassesResponse.Example;
 import com.example.marcin.mywords.Utils.BottomNavViewHelper;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
@@ -31,22 +31,22 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
         SetupButtons();
         setupBottomNavView();
 
-         client = ServiceApi.createServiceApi();
-         db=AppDatabase.getDatabase(this);
+        client = ServiceApi.createServiceApi();
+        db=AppDatabase.getDatabase(this);
 
     }
-private void SetupButtons(){
-    Find = findViewById(R.id.button);
-    Find.setOnClickListener(this);
+    private void SetupButtons(){
+        Find = findViewById(R.id.button);
+        Find.setOnClickListener(this);
 
-    Save = findViewById(R.id.button2);
-    Save.setOnClickListener(this);
+        Save = findViewById(R.id.button2);
+        Save.setOnClickListener(this);
 
-    Input=findViewById(R.id.Text);
+        Input=findViewById(R.id.Text);
 
-    Result=findViewById(R.id.Result);
+        Result=findViewById(R.id.Result);
     }
-
+    //zapytanie do API - Retrofit
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -58,6 +58,7 @@ private void SetupButtons(){
                     public void onResponse(Call<Example> exampleCall, Response<Example> exampleResponse) {
                         if(exampleResponse.isSuccessful()){
                             Example definitionBody = exampleResponse.body();
+                            //pobieranie definicji
                             definition = definitionBody.getResults().get(0).getLexicalEntries()
                                     .get(0).getEntries().get(0).getSenses().get(0).getDefinitions().get(0);
                             Result.setText(definition);
@@ -69,49 +70,37 @@ private void SetupButtons(){
 
                     @Override
                     public void onFailure(Call<Example> exampleCall, Throwable t) {
-                        Toast.makeText(MainAppActivity.this,"nie pyklo",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainAppActivity.this,"Blad odpowiedzi",Toast.LENGTH_SHORT).show();
                     }
                 });
 
                 break;
             case R.id.button2:
 //jak sprawdzac czy usuniete?
- if(db.flashCardDao().findFlashCard(Input.getText().toString()).size()==0){
-     FlashCard flashCard= new FlashCard();
-     flashCard.setWordDb(Input.getText().toString());
-     flashCard.setDefinitionDb(Result.getText().toString());
-     db.flashCardDao().insert(flashCard);
-     Intent i = new Intent(this,MainActivity.class);
-     startActivity(i);
- }
- else {
-     Toast toast = Toast.makeText(getApplicationContext(), "Word is already in database",Toast.LENGTH_LONG);
-     toast.show();
- }
-
-
-
-break;
-
-
+                if(db.flashCardDao().findFlashCard(Input.getText().toString()).size()==0 && !Result.getText().toString().equals("Definition")){
+                    FlashCard flashCard= new FlashCard();
+                    flashCard.setWordDb(Input.getText().toString());
+                    flashCard.setDefinitionDb(Result.getText().toString());
+                    db.flashCardDao().insert(flashCard);
+                    Intent i = new Intent(this,MainActivity.class);
+                    startActivity(i);
+                }
+                //Jesli juz slowko istnieje to w odpowiedzi zawsze bedzie wiecej niz jeden element
+                else if(db.flashCardDao().findFlashCard(Input.getText().toString()).size()!=0) {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Word is already in database",Toast.LENGTH_LONG);
+                    toast.show();
+                }
+                //konieczna definicja do zapisania
+                else if(Result.getText().toString().equals("Definition")){
+                    Toast toast = Toast.makeText(getApplicationContext(), "Need Definition Result",Toast.LENGTH_LONG);
+                    toast.show();
+                }
+                break;
         }
     }
-  /*  private static class InsertDbAsync extends AsyncTask<Void, Void, Void> {
-
-        private final AppDatabase mDb;
-
-        InsertDbAsync(AppDatabase db) {
-            mDb = db;
-        }
-
-        @Override
-        protected Void doInBackground(final Void... params) {
-            populateWithTestData(mDb);
-            return null;
-        }
-    }*/
-  private void setupBottomNavView(){
-      BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
-      BottomNavViewHelper.setupBottomNavView(bottomNavigationViewEx);
-  }
+    //poprawienie nav bara - biblioteka z gita
+    private void setupBottomNavView(){
+        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
+        BottomNavViewHelper.setupBottomNavView(bottomNavigationViewEx);
+    }
 }

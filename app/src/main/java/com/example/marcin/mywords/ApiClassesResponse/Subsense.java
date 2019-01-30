@@ -1,11 +1,11 @@
-package com.example.marcin.mywords;
+package com.example.marcin.mywords.ApiClassesResponse;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Sense {
+public class Subsense {
 
     @SerializedName("definitions")
     @Expose
@@ -13,9 +13,6 @@ public class Sense {
     @SerializedName("id")
     @Expose
     private String id;
-    @SerializedName("subsenses")
-    @Expose
-    private List<Subsense> subsenses = null;
 
     public List<String> getDefinitions() {
         return definitions;
@@ -31,14 +28,6 @@ public class Sense {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public List<Subsense> getSubsenses() {
-        return subsenses;
-    }
-
-    public void setSubsenses(List<Subsense> subsenses) {
-        this.subsenses = subsenses;
     }
 
 }
