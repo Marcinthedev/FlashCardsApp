@@ -3,6 +3,8 @@ package com.example.marcin.mywords;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +26,8 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
     private Button Save;
     private ApiClient client;
     private AppDatabase db;
+    private static final  int ACTIVITY_NUM = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,5 +106,9 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
     private void setupBottomNavView(){
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
         BottomNavViewHelper.setupBottomNavView(bottomNavigationViewEx);
+        BottomNavViewHelper.enableNavigation(getApplicationContext(),bottomNavigationViewEx);
+        Menu menu = bottomNavigationViewEx.getMenu();
+        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
+        menuItem.setChecked(true);
     }
 }

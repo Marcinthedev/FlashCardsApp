@@ -40,6 +40,7 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
 //public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public class MainActivity extends AppCompatActivity {
 
+    private static final  int ACTIVITY_NUM = 1;
 
     private ApiClient client;
     private AppDatabase db;
@@ -103,6 +104,10 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
     private void setupBottomNavView(){
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
         BottomNavViewHelper.setupBottomNavView(bottomNavigationViewEx);
+        BottomNavViewHelper.enableNavigation(getApplicationContext(),bottomNavigationViewEx);
+        Menu menu = bottomNavigationViewEx.getMenu();
+        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
+        menuItem.setChecked(true);
     }
 
     @Override

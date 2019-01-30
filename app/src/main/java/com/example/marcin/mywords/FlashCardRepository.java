@@ -9,14 +9,8 @@ import java.util.List;
 
 public class FlashCardRepository {
 
-    private MutableLiveData<List<FlashCard>> searchResults =
-            new MutableLiveData<>();
-
-
-
     private FlashCardDao flashCardDao;
     private LiveData<List<FlashCard>> allFlashCards;
-
 
 
     public FlashCardRepository(Application application){
@@ -32,9 +26,6 @@ public class FlashCardRepository {
         return allFlashCards;
     }
 
-    private void asyncFinished(List<FlashCard> results){
-        searchResults.setValue(results);
-    }
 
     public void insertFlashCard(FlashCard newflashcard) {
         new InsertAsyncTask(flashCardDao).execute(newflashcard);
@@ -48,38 +39,6 @@ public class FlashCardRepository {
         DeleteAsyncTask task = new DeleteAsyncTask(flashCardDao);
         task.execute(newflashcard);
     }
-
-   /* public void findFlashCard(String name) {
-        QueryAsyncTask task = new QueryAsyncTask(flashCardDao);
-        task.delegate = this;
-        task.execute(name);
-    }*/
-
-
-   /* private static class QueryAsyncTask extends
-            AsyncTask<String, Void, List<FlashCard>> {
-
-        private FlashCardDao asyncTaskDao;
-        private FlashCardRepository delegate = null;
-
-        QueryAsyncTask(FlashCardDao dao) {
-            asyncTaskDao = dao;
-        }
-
-        @Override
-        protected List<FlashCard> doInBackground(final String... params) {
-            return asyncTaskDao.findFlashCard(params[0]);
-        }
-
-        @Override
-        protected void onPostExecute(List<FlashCard> result) {
-            delegate.asyncFinished(result);
-        }
-    }*/
-
-
-
-
 
 
 
