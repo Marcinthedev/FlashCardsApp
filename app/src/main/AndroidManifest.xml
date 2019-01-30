@@ -19,6 +19,7 @@
         </activity>
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".ShowDefinitionActivity"></activity>
+        <activity android:name=".FlashCardActivityGame"></activity>
     </application>
 
 </manifest>
