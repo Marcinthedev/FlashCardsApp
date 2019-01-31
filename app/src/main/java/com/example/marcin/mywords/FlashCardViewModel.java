@@ -29,16 +29,17 @@ public class FlashCardViewModel extends AndroidViewModel
     LiveData<List<FlashCard>> getAllFlashCards(){
      return allFlashCards;
     }
-   /* List<FlashCard> findFlashCard(String name){
-     return foundFlashCard;
-    }
-*/
+
     public void insert(FlashCard flashCard) {
        FCRepository.insertFlashCard(flashCard);
    }
 
     public void delete(FlashCard flashCard){
        FCRepository.deleteFlashCard(flashCard);
+    }
+    public List<FlashCard> findFlashCard(String name){
+        foundFlashCard=FCRepository.findFlashCard(name);
+        return foundFlashCard;
     }
 
 

@@ -1,5 +1,7 @@
 package com.example.marcin.mywords;
 
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +27,7 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
     private Button Find;
     private Button Save;
     private ApiClient client;
-    private AppDatabase db;
+
     private FlashCardViewModel mflashCardViewModel;
     private static final  int ACTIVITY_NUM = 0;
 
@@ -35,9 +37,10 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_main);
         SetupButtons();
         setupBottomNavView();
+        mflashCardViewModel=ViewModelProviders.of(this).get(FlashCardViewModel.class);
 
         client = ServiceApi.createServiceApi();
-        db=AppDatabase.getDatabase(this);
+
         if(savedInstanceState!=null){
             Result.setText(savedInstanceState.getString("Definition"));
         }
@@ -85,26 +88,34 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.button2:
 //jak sprawdzac czy usuniete?
-               if(db.flashCardDao().findFlashCard(Input.getText().toString()).size()==0 && !Result.getText().toString().equals("Definition")){
-                  //  if(m.findFlashCard(Input.getText().toString()).size()==0 && !Result.getText().toString().equals("Definition")){
-
+                    if(mflashCardViewModel.findFlashCard(Input.getText().toString()).size()==0 && !Result.getText().toString().equals("Definition")
+                            && !Input.getText().toString().equals("")){
                         FlashCard flashCard= new FlashCard();
                     flashCard.setWordDb(Input.getText().toString());
                     flashCard.setDefinitionDb(Result.getText().toString());
-                    db.flashCardDao().insert(flashCard);
+                    mflashCardViewModel.insert(flashCard);
                     Intent i = new Intent(this,MainActivity.class);
                     startActivity(i);
                 }
                 //Jesli juz slowko istnieje to w odpowiedzi zawsze bedzie wiecej niz jeden element
-                else if(db.flashCardDao().findFlashCard(Input.getText().toString()).size()!=0) {
+                else if(mflashCardViewModel.findFlashCard(Input.getText().toString()).size()!=0 && !Input.getText().toString().equals("")) {
                     Toast toast = Toast.makeText(getApplicationContext(), "Word is already in database",Toast.LENGTH_LONG);
                     toast.show();
                 }
                 //konieczna definicja do zapisania
-                else if(Result.getText().toString().equals("Definition")){
+                else if(Result.getText().toString().equals("Definition") && !Input.getText().toString().equals("")){
                     Toast toast = Toast.makeText(getApplicationContext(), "Need Definition Result",Toast.LENGTH_LONG);
                     toast.show();
                 }
+                    else if(!Result.getText().toString().equals("Definition") && Input.getText().toString().equals("")){
+                        Toast toast = Toast.makeText(getApplicationContext(), "Need Input",Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                    else if(Result.getText().toString().equals("Definition") && Input.getText().toString().equals("")){
+                        Toast toast = Toast.makeText(getApplicationContext(), "Need Input & Definition",Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+
                 break;
         }
     }

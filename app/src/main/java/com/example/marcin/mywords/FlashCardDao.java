@@ -22,13 +22,6 @@ public interface FlashCardDao {
 
     @Query("SELECT * from FlashCard_Bank ORDER BY Word ASC")
     LiveData<List<FlashCard>> getAllFlashCards();
-//?
-    @Query("SELECT * FROM FlashCard_Bank WHERE FcId IN (:FlashCardId)")
-    LiveData<FlashCard> loadAllByIds(String FlashCardId);
-
-    @Query("SELECT * FROM FlashCard_Bank WHERE Word LIKE :WordOut AND " +
-            "Definition LIKE :DefinitionOut LIMIT 1")
-    FlashCard findByName(String WordOut, String DefinitionOut);
 
     @Query("DELETE FROM FlashCard_Bank")
     void deleteAllFlashCards();
@@ -39,7 +32,6 @@ public interface FlashCardDao {
 
     @Delete
     void delete(FlashCard flashCard);
-
 
 
 

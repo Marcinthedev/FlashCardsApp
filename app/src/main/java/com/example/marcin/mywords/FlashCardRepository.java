@@ -7,7 +7,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.os.AsyncTask;
 
 import java.util.List;
-
+// " Best practice "
 public class FlashCardRepository {
 
     private FlashCardDao flashCardDao;
@@ -32,13 +32,14 @@ public class FlashCardRepository {
     List<FlashCard> getAll(){return ViewFlashCardList;
     }
 
-    ///
+
     List<FlashCard> findFlashCard(String definition){
+        findViewFlashCardList=flashCardDao.findFlashCard(definition);
         return findViewFlashCardList;
     }
 
 
-    ////
+
     public void insertFlashCard(FlashCard newflashcard) {
         new InsertAsyncTask(flashCardDao).execute(newflashcard);
 
@@ -51,7 +52,6 @@ public class FlashCardRepository {
         DeleteAsyncTask task = new DeleteAsyncTask(flashCardDao);
         task.execute(newflashcard);
     }
-
 
 
 //    -------------------------------INSERT TASK-----------------------------------
