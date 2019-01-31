@@ -13,6 +13,7 @@ public class FlashCardViewModel extends AndroidViewModel
 
     private LiveData<List<FlashCard>> allFlashCards;
     private List<FlashCard> foundFlashCard;
+    private  List<FlashCard> ViewFlashCardList;
 
     private MutableLiveData<List<FlashCard>> searchResults;
 
@@ -20,19 +21,21 @@ public class FlashCardViewModel extends AndroidViewModel
         super(application);
         FCRepository = new FlashCardRepository(application);
         allFlashCards=FCRepository.getAllFlashCards();
+        ViewFlashCardList=FCRepository.getAll();
 
     }
 //getter
+    public List<FlashCard> getAll() { return  ViewFlashCardList;}
     LiveData<List<FlashCard>> getAllFlashCards(){
      return allFlashCards;
     }
    /* List<FlashCard> findFlashCard(String name){
      return foundFlashCard;
     }
-
+*/
     public void insert(FlashCard flashCard) {
-        FCRepository.insertFlashCard(flashCard);
-    }*/
+       FCRepository.insertFlashCard(flashCard);
+   }
 
     public void delete(FlashCard flashCard){
        FCRepository.deleteFlashCard(flashCard);

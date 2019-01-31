@@ -3,6 +3,7 @@ package com.example.marcin.mywords;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModelProvider;
 import android.os.AsyncTask;
 
 import java.util.List;
@@ -11,6 +12,8 @@ public class FlashCardRepository {
 
     private FlashCardDao flashCardDao;
     private LiveData<List<FlashCard>> allFlashCards;
+    private  List<FlashCard> ViewFlashCardList;
+    private  List<FlashCard> findViewFlashCardList;
 
 
     public FlashCardRepository(Application application){
@@ -18,7 +21,7 @@ public class FlashCardRepository {
         appDb = AppDatabase.getDatabase(application);
         flashCardDao = appDb.flashCardDao();
         allFlashCards=flashCardDao.getAllFlashCards();
-
+        ViewFlashCardList=flashCardDao.getAll();
     }
         //room zalacza wszystkie queries na osobnych threadach
     //Obserwowana livedata powiadomi obserwatora przy zmianie
@@ -26,7 +29,16 @@ public class FlashCardRepository {
         return allFlashCards;
     }
 
+    List<FlashCard> getAll(){return ViewFlashCardList;
+    }
 
+    ///
+    List<FlashCard> findFlashCard(String definition){
+        return findViewFlashCardList;
+    }
+
+
+    ////
     public void insertFlashCard(FlashCard newflashcard) {
         new InsertAsyncTask(flashCardDao).execute(newflashcard);
 
