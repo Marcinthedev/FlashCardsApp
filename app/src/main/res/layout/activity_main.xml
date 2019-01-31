@@ -45,7 +45,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="170dp"
+        android:layout_marginTop="160dp"
         android:text="@string/Definition"
 
         android:textSize="18sp" />

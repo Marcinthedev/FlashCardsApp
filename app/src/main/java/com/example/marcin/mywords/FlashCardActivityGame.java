@@ -1,7 +1,11 @@
 package com.example.marcin.mywords;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +19,7 @@ import android.widget.Toast;
 import com.example.marcin.mywords.Utils.BottomNavViewHelper;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -27,7 +32,11 @@ public class FlashCardActivityGame extends AppCompatActivity implements View.OnC
     private AppDatabase db;
     private int losuj;
     private int ilosc;
-    private  List<FlashCard> allFlashCards;
+
+    private  List<FlashCard> ViewFlashCardList;
+    private FlashCardViewModel mflashCardViewModel;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +45,15 @@ public class FlashCardActivityGame extends AppCompatActivity implements View.OnC
         SetupButtons();
 
         db=AppDatabase.getDatabase(this);
-         allFlashCards = db.flashCardDao().getAll();
-         ilosc = allFlashCards.size();
+
+        mflashCardViewModel=ViewModelProviders.of(this).get(FlashCardViewModel.class);
+        ViewFlashCardList= mflashCardViewModel.getAll();
+        ilosc = ViewFlashCardList.size();
+
+        if(savedInstanceState!=null){
+            definition.setText(savedInstanceState.getString("Definition"));
+        }
+
         Log.i("Game","Your list size is = "+ilosc);
     }
     @Override
@@ -51,20 +67,21 @@ public class FlashCardActivityGame extends AppCompatActivity implements View.OnC
                 else
                 {
                     Log.i("Game","Your list size is = "+ilosc);
+                    ilosc =ViewFlashCardList.size();
 
                     losuj = (int) (Math.random()*ilosc);
                     Log.i("Game","Your random = "+losuj);
 
-                    definition.setText(allFlashCards.get(losuj).getDefinitionDb().toString());
+                   definition.setText(ViewFlashCardList.get(losuj).getDefinitionDb());
                 }
 
                 break;
             case R.id.button4:
-                  if(word.getText().toString().equals(allFlashCards.get(losuj).getWordDb()) && !definition.getText().equals("Definition")){
+                  if(word.getText().toString().equals(ViewFlashCardList.get(losuj).getWordDb()) && !definition.getText().equals("Definition")){
                 Toast toast = Toast.makeText(getApplicationContext(), "Brawo! Odpowiedz poprawna",Toast.LENGTH_LONG);
                 toast.show();
             }
-            else if(!word.getText().toString().equals(allFlashCards.get(losuj).getWordDb()) && !definition.getText().equals("Definition")) {
+            else if(!word.getText().toString().equals(ViewFlashCardList.get(losuj).getWordDb()) && !definition.getText().equals("Definition")) {
                       Toast toast = Toast.makeText(getApplicationContext(), "Blad! Postaraj sie bardziej",Toast.LENGTH_LONG);
                       toast.show();
                   }
@@ -74,13 +91,6 @@ public class FlashCardActivityGame extends AppCompatActivity implements View.OnC
                   }
                 break;
         }}
-
-
-
-
-
-
-
 
     private void SetupButtons(){
         Check = findViewById(R.id.button4);
@@ -95,7 +105,12 @@ public class FlashCardActivityGame extends AppCompatActivity implements View.OnC
     }
 
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("Definition",definition.getText().toString());
 
+    }
 
     private void setupBottomNavView(){
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);

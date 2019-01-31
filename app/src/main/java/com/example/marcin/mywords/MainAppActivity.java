@@ -26,6 +26,7 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
     private Button Save;
     private ApiClient client;
     private AppDatabase db;
+    private FlashCardViewModel mflashCardViewModel;
     private static final  int ACTIVITY_NUM = 0;
 
     @Override
@@ -37,6 +38,9 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
 
         client = ServiceApi.createServiceApi();
         db=AppDatabase.getDatabase(this);
+        if(savedInstanceState!=null){
+            Result.setText(savedInstanceState.getString("Definition"));
+        }
 
     }
     private void SetupButtons(){
@@ -81,8 +85,10 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.button2:
 //jak sprawdzac czy usuniete?
-                if(db.flashCardDao().findFlashCard(Input.getText().toString()).size()==0 && !Result.getText().toString().equals("Definition")){
-                    FlashCard flashCard= new FlashCard();
+               if(db.flashCardDao().findFlashCard(Input.getText().toString()).size()==0 && !Result.getText().toString().equals("Definition")){
+                  //  if(m.findFlashCard(Input.getText().toString()).size()==0 && !Result.getText().toString().equals("Definition")){
+
+                        FlashCard flashCard= new FlashCard();
                     flashCard.setWordDb(Input.getText().toString());
                     flashCard.setDefinitionDb(Result.getText().toString());
                     db.flashCardDao().insert(flashCard);
@@ -101,6 +107,13 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("Definition",Result.getText().toString());
+
     }
     //poprawienie nav bara - biblioteka z gita
     private void setupBottomNavView(){
