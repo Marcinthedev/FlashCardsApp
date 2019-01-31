@@ -35,7 +35,7 @@ public class BottomNavViewHelper {
                         context.startActivity(intent2);
                         break;
                     case R.id.ic_word:
-                        Intent intent3 = new Intent(context, FlashCardActivityGame.class);
+                        Intent intent3 = new Intent(context, FlashCardActivityGame.class);//ACTIVITY 2
                         context.startActivity(intent3);
                         break;
                 }

@@ -42,8 +42,6 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
 
     private static final  int ACTIVITY_NUM = 1;
 
-    private ApiClient client;
-    private AppDatabase db;
     private FlashCardViewModel decflashCardViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

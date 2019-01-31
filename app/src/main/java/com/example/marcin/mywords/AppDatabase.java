@@ -12,7 +12,7 @@ import android.support.annotation.NonNull;
 public abstract class AppDatabase extends RoomDatabase {
     //uzywanie metod z dao
     public abstract FlashCardDao flashCardDao();
-//singleton
+//singleton - aby zapobiec otwarciu kilku baz danych w tym samym czasie
     private static volatile AppDatabase INSTANCE;
 
     static AppDatabase getDatabase(final Context context){
@@ -33,16 +33,15 @@ public abstract class AppDatabase extends RoomDatabase {
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
 
         @Override
-        public void onOpen(@NonNull SupportSQLiteDatabase db) {
-            super.onOpen(db);
-            // wpisywanie wstepnych danych
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+            // wpisywanie wstepnych danych na onCreate jedynie
             new PopulateDbAsync(INSTANCE).execute();
         }
     };
 
     /**
-     * Populate the database in the background.
-     * If you want to start with more words, just add them.
+     * Dane poczatkowe
      */
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
@@ -54,8 +53,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(final Void... params) {
-            // Start the app with a clean database every time.
-            // Not needed if you only populate on creation.
+
             FlashCard flashCardnew = new FlashCard();
             flashCardnew.setWordDb("cat");
             flashCardnew.setDefinitionDb("a small domesticated carnivorous mammal with soft fur, " +
