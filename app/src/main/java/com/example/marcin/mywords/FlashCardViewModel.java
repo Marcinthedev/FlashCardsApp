@@ -15,7 +15,6 @@ public class FlashCardViewModel extends AndroidViewModel
     private List<FlashCard> foundFlashCard;
     private  List<FlashCard> ViewFlashCardList;
 
-    private MutableLiveData<List<FlashCard>> searchResults;
 
     public FlashCardViewModel (Application application){
         super(application);
@@ -43,9 +42,6 @@ public class FlashCardViewModel extends AndroidViewModel
     }
 
 
-    MutableLiveData<List<FlashCard>> getSearchResults() {
-    return searchResults;
-}
 
     public void deleteAll() {
         FCRepository.deleteAllFlashCards();

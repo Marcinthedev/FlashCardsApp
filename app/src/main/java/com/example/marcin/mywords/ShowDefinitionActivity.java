@@ -20,10 +20,10 @@ public class ShowDefinitionActivity extends AppCompatActivity {
 
     }
     private void getIncomingIntent(){
-        Log.d(TAG, "getIncomingIntent: checking for incoming intents.");
+        Log.d(TAG, "getIncomingIntent: Czy cos przyszlo - intent");
 
         if(getIntent().hasExtra("Word") && getIntent().hasExtra("Definition")){
-            Log.d(TAG, "getIncomingIntent: found intent extras.");
+            Log.d(TAG, "getIncomingIntent: Word i Definition.");
 
             String Word = getIntent().getStringExtra("Word");
             String Definition= getIntent().getStringExtra("Definition");
@@ -32,7 +32,7 @@ public class ShowDefinitionActivity extends AppCompatActivity {
         }
     }
     private void setFlashCard(String Word, String Definition){
-        Log.d(TAG, "setImage: setting te image and name to widgets.");
+        Log.d(TAG, "setImage: wrzucenie danych do textview - word + definition");
 
         TextView word = findViewById(R.id.wordout);
         word.setText(Word);

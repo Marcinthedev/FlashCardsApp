@@ -29,7 +29,6 @@ public class FlashCardActivityGame extends AppCompatActivity implements View.OnC
     private Button Next;
     private TextView definition;
     private EditText word;
-    private AppDatabase db;
     private int losuj;
     private int ilosc;
 
@@ -44,7 +43,6 @@ public class FlashCardActivityGame extends AppCompatActivity implements View.OnC
         setupBottomNavView();
         SetupButtons();
 
-        db=AppDatabase.getDatabase(this);
 
         mflashCardViewModel=ViewModelProviders.of(this).get(FlashCardViewModel.class);
         ViewFlashCardList= mflashCardViewModel.getAll();

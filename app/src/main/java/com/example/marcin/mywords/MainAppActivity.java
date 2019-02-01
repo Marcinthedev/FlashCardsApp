@@ -87,7 +87,7 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
 
                 break;
             case R.id.button2:
-//jak sprawdzac czy usuniete?
+            //czy istnieje takie juz
                     if(mflashCardViewModel.findFlashCard(Input.getText().toString()).size()==0 && !Result.getText().toString().equals("Definition")
                             && !Input.getText().toString().equals("")){
                         FlashCard flashCard= new FlashCard();

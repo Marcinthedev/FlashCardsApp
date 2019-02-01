@@ -54,12 +54,12 @@ public class FlashCard {
     }
 
 
-    @Override
+   /* @Override
     public int hashCode() {
         int result = FcId;
         result = 31 * result + (WordDb != null ? WordDb.hashCode() : 0);
         return result;
-    }
+    }*/
 
     @Override
     public String toString() {

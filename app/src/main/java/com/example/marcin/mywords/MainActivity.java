@@ -54,6 +54,7 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
 
         final FlashCardAdapter adapter = new FlashCardAdapter(this);
         recyclerView.setAdapter(adapter);
+        //Layout do recyclera
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         android.support.v7.widget.DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), VERTICAL);
         recyclerView.addItemDecoration(decoration);
