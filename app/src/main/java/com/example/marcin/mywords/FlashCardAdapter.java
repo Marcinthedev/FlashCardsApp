@@ -65,6 +65,7 @@ public class FlashCardAdapter
     @Override
     public void onBindViewHolder(@NonNull FlashCardHolder holder,final int position) {
         if (flashCards!=null) {
+            //bindowanie do konkretnych elementow
             FlashCard current = flashCards.get(position);
             holder.flashcardDefinition.setText(current.getDefinitionDb());
             holder.flashcardWord.setText(current.getWordDb());
