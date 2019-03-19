@@ -3,19 +3,17 @@ package com.example.marcin.mywords;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModelProvider;
 import android.os.AsyncTask;
 
 import java.util.List;
-
+// " Best practice "
 public class FlashCardRepository {
-
-    private MutableLiveData<List<FlashCard>> searchResults =
-            new MutableLiveData<>();
-
-
 
     private FlashCardDao flashCardDao;
     private LiveData<List<FlashCard>> allFlashCards;
+    private  List<FlashCard> ViewFlashCardList;
+    private  List<FlashCard> findViewFlashCardList;
 
 
     public FlashCardRepository(Application application){
@@ -23,57 +21,38 @@ public class FlashCardRepository {
         appDb = AppDatabase.getDatabase(application);
         flashCardDao = appDb.flashCardDao();
         allFlashCards=flashCardDao.getAllFlashCards();
+        ViewFlashCardList=flashCardDao.getAll();
     }
         //room zalacza wszystkie queries na osobnych threadach
     //Obserwowana livedata powiadomi obserwatora przy zmianie
     LiveData<List<FlashCard>> getAllFlashCards() {
         return allFlashCards;
     }
-    private void asyncFinished(List<FlashCard> results){
-        searchResults.setValue(results);
-    }
-    public void insertFlashCard(FlashCard newflashcard) {
-        InsertAsyncTask task = new InsertAsyncTask(flashCardDao);
-        task.execute(newflashcard);
+
+    List<FlashCard> getAll(){return ViewFlashCardList;
     }
 
-    /*public void deleteFlashCard(FlashCard newflashcard) {
+
+    List<FlashCard> findFlashCard(String definition){
+        findViewFlashCardList=flashCardDao.findFlashCard(definition);
+        return findViewFlashCardList;
+    }
+
+
+
+    public void insertFlashCard(FlashCard newflashcard) {
+        new InsertAsyncTask(flashCardDao).execute(newflashcard);
+
+    }
+    public void deleteAllFlashCards(){
+        new DeleteAllAsyncTask(flashCardDao).execute();
+    }
+
+    public void deleteFlashCard(FlashCard newflashcard) {
         DeleteAsyncTask task = new DeleteAsyncTask(flashCardDao);
         task.execute(newflashcard);
-    }*/
-
- /*   public void findFlashCard(FlashCard newflashcard) {
-        QueryAsyncTask task = new QueryAsyncTask(flashCardDao);
-        task.delegate = this;
-        task.execute(newflashcard);
     }
-*/
 
-
-
-
-
-
-
-//Na ten moment niepotrzebne
-    /*private static class QueryAsyncTask extends
-            AsyncTask<String,Void,List<FlashCard>>{
-        private FlashCardDao asyncTaskDao;
-        private FlashCardRepository delegate =null;
-
-        QueryAsyncTask(FlashCardDao dao){
-            asyncTaskDao=dao;
-        }
-        @Override
-        protected List<FlashCard> doInBackground(final String... params) {
-            return asyncTaskDao.findFlashCard(params[0]);
-        }
-
-        @Override
-        protected void onPostExecute(List<FlashCard> result) {
-            delegate.asyncFinished(result);
-        }
-    }*/
 
 //    -------------------------------INSERT TASK-----------------------------------
     private static class InsertAsyncTask extends AsyncTask<FlashCard, Void, Void> {
@@ -106,4 +85,21 @@ public class FlashCardRepository {
             return null;
         }
     }
+    //    -------------------------------DELETE ALL TASK-----------------------------------
+
+    private static class DeleteAllAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private FlashCardDao asyncTaskDao;
+
+        DeleteAllAsyncTask(FlashCardDao dao) {
+            asyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final Void... voids) {
+            asyncTaskDao.deleteAllFlashCards();
+            return null;
+        }
+    }
+
 }

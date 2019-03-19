@@ -22,29 +22,17 @@ public interface FlashCardDao {
 
     @Query("SELECT * from FlashCard_Bank ORDER BY Word ASC")
     LiveData<List<FlashCard>> getAllFlashCards();
-//?
-    @Query("SELECT * FROM FlashCard_Bank WHERE FcId IN (:FlashCardId)")
-    LiveData<FlashCard> loadAllByIds(String FlashCardId);
 
-    @Query("SELECT * FROM FlashCard_Bank WHERE Word LIKE :WordOut AND " +
-            "Definition LIKE :DefinitionOut LIMIT 1")
-    FlashCard findByName(String WordOut, String DefinitionOut);
+    @Query("DELETE FROM FlashCard_Bank")
+    void deleteAllFlashCards();
 
     //jesli jest to samo id to zmieniamy na nowe
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(FlashCard flashCard);
-
-    /*@Insert
-    void insertAll(FlashCard... flashCards);*/
 
     @Delete
     void delete(FlashCard flashCard);
-    @Delete
-    public void deleteFCs(FlashCard... flashCards);
 
-//    ----------------------------------------
-    @Update
-    void updateFlashcards(FlashCard...flashCards);
 
 
 

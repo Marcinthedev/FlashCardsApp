@@ -1,97 +1,132 @@
 package com.example.marcin.mywords;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
+
+import android.arch.lifecycle.ViewModelProviders;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.marcin.mywords.Utils.BottomNavViewHelper;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.support.v7.widget.RecyclerView.VERTICAL;
+
 //public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    public class MainActivity extends AppCompatActivity{
-    private String definition;
-    private TextView Result;
-    private EditText Input;
-    private Button Find;
-    private Button Save;
-    //private FlashCard flashCard;
-    private ApiClient client;
-    private AppDatabase db;
+    public class MainActivity extends AppCompatActivity {
+
+    private static final  int ACTIVITY_NUM = 1;
+
+    private FlashCardViewModel decflashCardViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-       // SetupButtons();
-        client = ServiceApi.createServiceApi();
-         db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class,"WordBankDatabase").build();
-    }
+        setContentView(R.layout.main_act_tutorial);
+        setupBottomNavView();
+        RecyclerView recyclerView = findViewById(R.id.recyclerview);
 
 
-    private void SetupButtons() {
-/*
-        Find = findViewById(R.id.button);
-        Find.setOnClickListener(this);
 
-        Save = findViewById(R.id.button2);
-        Save.setOnClickListener(this);
+        final FlashCardAdapter adapter = new FlashCardAdapter(this);
+        recyclerView.setAdapter(adapter);
+        //Layout do recyclera
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        android.support.v7.widget.DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), VERTICAL);
+        recyclerView.addItemDecoration(decoration);
+        decflashCardViewModel=ViewModelProviders.of(this).get(FlashCardViewModel.class);
 
-        Input=findViewById(R.id.Text);
+        decflashCardViewModel.getAllFlashCards().observe(this, new Observer<List<FlashCard>>() {
+            @Override
+            public void onChanged(@Nullable List<FlashCard> flashCards) {
+                adapter.setFlashCards(flashCards);
 
-        Result=findViewById(R.id.Result);*/
-
-    }
-  /*  @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.button:
-                String word= Input.getText().toString();
-                Call<Example> exampleCall= client.GetExampleFor(word);
-                exampleCall.enqueue(new Callback<Example>() {
+                //adding new words
+                FloatingActionButton fab = findViewById(R.id.fab);
+                fab.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onResponse(Call<Example> exampleCall, Response<Example> exampleResponse) {
-                        if(exampleResponse.isSuccessful()){
-                            Example definitionBody = exampleResponse.body();
-                            definition = definitionBody.getResults().get(0).getLexicalEntries()
-                                    .get(0).getEntries().get(0).getSenses().get(0).getDefinitions().get(0);
-                            // System.out.println(definition);
-                            Result.setText(definition);
-                        }
-                        else {
-                            System.out.println(exampleResponse.errorBody());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Example> exampleCall, Throwable t) {
-                        Toast.makeText(MainActivity.this,"nie pyklo",Toast.LENGTH_SHORT).show();
+                    public void onClick(View view) {
+                        Intent intent = new Intent(MainActivity.this, MainAppActivity.class);
+                        startActivity(intent);
                     }
                 });
 
-                break;
-            case R.id.button2:
-                FlashCard flashCard= new FlashCard();
-                flashCard.setWordDb(Input.getText().toString());
-                flashCard.setDefinitionDb(Result.getText().toString());
+            }
+        });
+        //ItemTouchHelper zeby poprzez przesuniecie usuwac dane slowko z bazy danych
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
 
-                db.flashCardDao().insert(flashCard);
-                //worker thread to insert data
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                decflashCardViewModel.delete(adapter.getFlashCardAt(viewHolder.getAdapterPosition()));
+                Toast.makeText(MainActivity.this, "Note deleted", Toast.LENGTH_SHORT);
+            }
+        }).attachToRecyclerView(recyclerView);
 
 
+
+
+    }
+
+
+    /**
+     * BottomNavigationSetup
+     */
+    private void setupBottomNavView(){
+        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
+        BottomNavViewHelper.setupBottomNavView(bottomNavigationViewEx);
+        BottomNavViewHelper.enableNavigation(getApplicationContext(),bottomNavigationViewEx);
+        Menu menu = bottomNavigationViewEx.getMenu();
+        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
+        menuItem.setChecked(true);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.delete_item,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.delete_all_flashcards:
+                decflashCardViewModel.deleteAll();
+                Toast.makeText(this,"All FlashCards Deleted", Toast.LENGTH_SHORT).show();
+                return true;
+                default:
+                    return super.onOptionsItemSelected(item);
 
         }
-    }*/
 
-
+    }
 }
