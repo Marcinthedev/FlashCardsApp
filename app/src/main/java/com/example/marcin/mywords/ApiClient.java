@@ -9,7 +9,8 @@ import retrofit2.http.Path;
 //Klient API - postać zapytania - Header
 public interface ApiClient {
     @Headers({"Accept: application/json",
-            })
+            "app_id: ", //api id
+            "app_key: "}) //api klucz
     @GET("{word}/definitions")
     Call<Example> GetExampleFor (@Path("word") String word);
 }
