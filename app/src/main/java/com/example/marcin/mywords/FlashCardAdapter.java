@@ -26,7 +26,7 @@ public class FlashCardAdapter
     private Context mcontext;
 
 
-    //referencje do view - nie trzeba jak w listview tworzyc findViewByID....
+    //referencje do view
     //przypisanie odpowiednich TextView - w bind view laczenie z danymi
     static class FlashCardHolder extends RecyclerView.ViewHolder{
         private final TextView flashcardDefinition;
