@@ -4,7 +4,7 @@ Simple App in which you can find word's definitions and save them in the databas
 <ul>
   <li>Application architecture is based on MVVM model.<br>
 </li>
-   <li>API for this project - Oxford Lerners Dictionary Developer API. <br>
+   <li>API for this project - Oxford Lerners Dictionary Developer API.  -- Key Needed<br>
 </li>
    <li>Database used - Room Database (ORM).<br>
 </li>
